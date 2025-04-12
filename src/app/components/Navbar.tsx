@@ -14,7 +14,6 @@ export default function Navbar() {
 
   const { credits }=useCredits();
 
-
   const getSubscriptionBadge = (subscription: string) => {
     const baseClasses = "px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap";
     
@@ -69,8 +68,8 @@ export default function Navbar() {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-3">
               {(pathname !== '/generate' && pathname !== '/dashboard') && <CreditCounter credits={credits} />}
-                <div className={getSubscriptionBadge('pro')}>
-                  {'pro'}
+                <div className={getSubscriptionBadge('free')}>
+                  {'free'}
                 </div>
               </div>
               <button
