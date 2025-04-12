@@ -20,7 +20,7 @@ export default function useAuth() {
   };
 
   const logout = async () => {
-    await signOut({ callbackUrl: '/' });
+    await signOut({ callbackUrl: '/' })
   };
 
 

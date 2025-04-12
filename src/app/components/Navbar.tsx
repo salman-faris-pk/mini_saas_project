@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation';
 import CreditCounter from './CreditCounter';
 import useAuth from '../hooks/useAuth';
 import useCredits from "../hooks/useCredits"
-import { useEffect } from 'react';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -13,10 +12,9 @@ export default function Navbar() {
     logout,
   } = useAuth();
 
-  const { credits,refreshCredits }=useCredits();
+  const { credits }=useCredits();
 
 
-  
   const getSubscriptionBadge = (subscription: string) => {
     const baseClasses = "px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap";
     
