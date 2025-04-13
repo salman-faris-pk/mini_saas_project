@@ -15,13 +15,13 @@ export async function GET() {
   try {
     await dbconnect();
 
-    const user = await User.findById(session.user.id).select('credits');
+    const user = await User.findById(session.user.id).select('credits plan');
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ credits: user.credits }, { status: 200 });
+    return NextResponse.json({ credits: user.credits ,plan: user.plan}, { status: 200 });
 
   } catch (error) {
     console.error('Error fetching credits:', error);

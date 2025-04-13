@@ -12,7 +12,7 @@ export default function Navbar() {
     logout,
   } = useAuth();
 
-  const { credits }=useCredits();
+  const { credits,isLoading }=useCredits();
 
   const getSubscriptionBadge = (subscription: string) => {
     const baseClasses = "px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap";
@@ -67,7 +67,7 @@ export default function Navbar() {
           {isAuthenticated && (
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-3">
-              {(pathname !== '/generate' && pathname !== '/dashboard') && <CreditCounter credits={credits} />}
+              {(pathname !== '/generate' && pathname !== '/dashboard') && <CreditCounter credits={credits} isLoading={isLoading}/>}
                 <div className={getSubscriptionBadge('free')}>
                   {'free'}
                 </div>

@@ -11,7 +11,7 @@ export default function GeneratePage() {
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null); 
-  const { credits, refreshCredits } = useCredits();
+  const { credits, refreshCredits,isLoading:loading } = useCredits();
   const { user,isLoading } = useAuth();
   
   const userCredit=user?.credits;
@@ -36,7 +36,7 @@ export default function GeneratePage() {
 
       const data = await response.json();
         setGeneratedImage(data.imageUrl || null);
-         await refreshCredits();
+        await refreshCredits();
         setIsGenerating(false);
     } catch (error) {
       console.error('Error generating images:', error);
@@ -50,7 +50,7 @@ export default function GeneratePage() {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Generate Images</h1>
-          <CreditCounter credits={credits}/>
+          <CreditCounter credits={credits} isLoading={loading}/>
         </div>
 
         <div className="bg-white rounded-xl shadow-md p-6 mb-8">
@@ -67,7 +67,7 @@ export default function GeneratePage() {
 
         <div className="bg-white rounded-xl shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4 text-gray-800">
-            {generatedImage ? 'Generated Images' : 'Your images will appear here'}
+            {generatedImage ? 'Generated Image' : 'Your image will appear here'}
           </h2>
           <GImage image={generatedImage} ISgenerating={isGenerating}/>
         </div>

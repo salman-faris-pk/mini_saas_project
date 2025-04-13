@@ -14,11 +14,11 @@ export default function GenerateForm({
   loading
 }: any) {
   
-  const credits = rawCredits ?? 0;
-  const isFormDisabled = !user || (user && credits <= 0);
+  const isCreditsLoaded = rawCredits !== undefined && rawCredits !== null;
+  const credits = rawCredits;
+  const isFormDisabled = !user || (user && isCreditsLoaded && credits <= 0);
 
-  
-  if (loading || rawCredits === undefined || rawCredits === null) {
+  if (loading || (user && !isCreditsLoaded)) {
     return <Loader />;
   }
 
@@ -46,12 +46,12 @@ export default function GenerateForm({
           <>
             {credits <= 0 ? (
               <Link 
-              href="/pricing"
-              className="flex items-center px-6 py-2 rounded-lg font-medium text-white bg-yellow-500 hover:bg-yellow-600 transition-colors"
-            >
-              <FaCrown className="mr-2 text-xl" />
-               <span className='text-lg mt-1'>Premium</span>
-            </Link>
+                href="/pricing"
+                className="flex items-center px-6 py-2 rounded-lg font-medium text-white bg-yellow-500 hover:bg-yellow-600 transition-colors"
+              >
+                <FaCrown className="mr-2 text-xl" />
+                <span className="text-lg mt-1">Premium</span>
+              </Link>
             ) : (
               <button
                 type="submit"
@@ -67,16 +67,16 @@ export default function GenerateForm({
             )}
 
             <div className="text-sm">
-            {credits > 0 ? (
-        <span className="text-gray-600">
-          You have <span className="font-semibold">{credits}</span> credit{credits > 1 ? 's' : ''} remaining
-         </span>
-        ) : (
-       <span className="text-amber-600 me-5">
-          Get premium for unlimited credits
-        </span>
-          )}
-          </div>
+              {credits > 0 ? (
+                <span className="text-gray-600">
+                  You have <span className="font-semibold">{credits}</span> credit{credits > 1 ? 's' : ''} remaining
+                </span>
+              ) : (
+                <span className="text-amber-600 me-5">
+                  Get premium for unlimited credits
+                </span>
+              )}
+            </div>
           </>
         ) : (
           <div className="w-full text-center space-y-4">
@@ -101,3 +101,4 @@ export default function GenerateForm({
     </form>
   );
 }
+

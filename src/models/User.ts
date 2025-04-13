@@ -6,13 +6,19 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   emailVerified: { type: Boolean, default: false },
-  credits: { type: Number, default: 5,min: 0},
+  credits: { type: Number, default: 5, min: 0 },
+  plan: { 
+    type: String, 
+    enum: ['free', 'pro', 'elite'],
+    default: 'free' 
+  },
+  stripeSubscriptionId: { type: String },
   images: [{
     url: { type: String, required: true },
     prompt: { type: String, required: true },
     createdAt: { type: Date, default: Date.now }
   }]
-},{
+}, {
   timestamps: true
 });
 

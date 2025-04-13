@@ -29,7 +29,6 @@ export async function POST(req:Request) {
       return Response.json({ error: 'Prompt is required' }, { status: 400 });
     }
 
-    // First check if the model is ready
     const modelStatus = await fetch(
       'https://api-inference.huggingface.co/models/ZB-Tech/Text-to-Image',
       {
@@ -38,17 +37,17 @@ export async function POST(req:Request) {
         },
       }
     );
+   
 
     if (!modelStatus.ok) {
       const statusText = await modelStatus.text();
       console.error('Model status check failed:', statusText);
       return Response.json(
         { error: 'Image generation service is currently unavailable. Please try again later.' },
-        { status: 503 }
+        { status: 503 } 
       );
     }
 
-    // Then make the actual request
     const response = await fetch(
       'https://api-inference.huggingface.co/models/ZB-Tech/Text-to-Image',
       {
@@ -64,6 +63,7 @@ export async function POST(req:Request) {
       }
     );
 
+  
     const contentType = response.headers.get('content-type');
     if (contentType?.includes('text/html')) {
       const htmlResponse = await response.text();
