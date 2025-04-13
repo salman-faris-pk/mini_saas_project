@@ -1,7 +1,9 @@
-"use client"
+"use client";
+
+import { useState } from "react";
+import { useDeleteImage } from "@/app/hooks/useDeleteImg";
 
 interface Image {
-  id: number;
   prompt: string;
   url: string;
   createdAt: string;
@@ -14,28 +16,39 @@ interface ImageGalleryProps {
 }
 
 const ImageGallery = ({ images, showAll, setShowAll }: ImageGalleryProps) => {
-  const displayedImages = showAll ? images : images.slice(0, 3);
+  const [galleryImages, setGalleryImages] = useState<Image[]>(images);
+  const { deleteImage, loading, error } = useDeleteImage();
+
+  const handleDelete = async (url: string) => {
+    const confirmDelete = confirm("Are you sure you want to delete this image?");
+    if (!confirmDelete) return;
+
+    const result = await deleteImage(url);
+    if (result?.message) {
+      setGalleryImages((prev) => prev.filter((img) => img.url !== url));
+      setTimeout(()=>{
+      window.location.reload()
+      },800)
+    }
+  };
+
+  const displayedImages = showAll ? galleryImages : galleryImages.slice(0, 3);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
-  };
-
-  const handleDelete = (id: number) => {
-    console.log(`Deleting image with id: ${id}`);
-    // Add your deletion logic here
   };
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {displayedImages.map((image) => (
+        {displayedImages.map((image, i) => (
           <div
-            key={image.id}
+            key={i}
             className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
           >
             <div className="h-48 bg-gray-100 relative">
@@ -49,9 +62,10 @@ const ImageGallery = ({ images, showAll, setShowAll }: ImageGalleryProps) => {
               <div className="flex justify-between items-start mb-2">
                 <h3 className="font-medium text-gray-800 line-clamp-2">{image.prompt}</h3>
                 <button
-                  onClick={() => handleDelete(image.id)}
                   className="text-red-500 hover:text-red-700 ml-2"
                   aria-label="Delete image"
+                  onClick={() => handleDelete(image.url)}
+                  disabled={loading}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -84,6 +98,10 @@ const ImageGallery = ({ images, showAll, setShowAll }: ImageGalleryProps) => {
             Show Less
           </button>
         </div>
+      )}
+
+      {error && (
+        <p className="text-red-500 text-center text-sm">{error}</p>
       )}
     </div>
   );

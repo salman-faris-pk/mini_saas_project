@@ -12,7 +12,10 @@ export default function Navbar() {
     logout,
   } = useAuth();
 
-  const { credits,isLoading }=useCredits();
+  const { credits,isLoading,plan}=useCredits();
+
+  if (isLoading || plan === '') return null;
+
 
   const getSubscriptionBadge = (subscription: string) => {
     const baseClasses = "px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap";
@@ -20,7 +23,7 @@ export default function Navbar() {
     switch(subscription) {
       case 'pro':
         return `${baseClasses} bg-blue-200 text-blue-800 border border-blue-200`;
-      case 'Elite':
+      case 'elite':
         return `${baseClasses} bg-purple-100 text-purple-800 border border-purple-200`;
       default:
         return `${baseClasses} bg-gray-100 text-gray-800 border border-gray-200`;
@@ -68,8 +71,8 @@ export default function Navbar() {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-3">
               {(pathname !== '/generate' && pathname !== '/dashboard') && <CreditCounter credits={credits} isLoading={isLoading}/>}
-                <div className={getSubscriptionBadge('free')}>
-                  {'free'}
+                <div className={getSubscriptionBadge(`${plan}`)}>
+                {plan === 'elite' ? 'Elite' : plan === 'pro' ? 'Pro' : 'Free'} plan
                 </div>
               </div>
               <button
